@@ -18,6 +18,9 @@ import { AddMovie } from './AddMovie';
 import { MovieDetails } from './MovieDetails';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { TicTacToe } from './TicTacToe';
 
 
 function App() {
@@ -115,13 +118,13 @@ function App() {
 
   const navigate = useNavigate();
 
+  const [mode, setMode] = useState("dark");
 
   const theme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: mode,
     },
   });
-
   
   return (
     <ThemeProvider theme={theme}>
@@ -146,6 +149,13 @@ function App() {
               <Button color="inherit" onClick={()=> navigate("/color-game")} >Color Game</Button>
               <Button color="inherit" onClick={()=> navigate("/movies")} >Movies</Button>
               <Button color="inherit" onClick={()=> navigate("/movies/add")} >Add Movie</Button>
+              <Button color="inherit" onClick={()=> navigate("/tic-tac-toe")} >Tic-Tac-Toe</Button>
+              <Button 
+              color="inherit"
+              startIcon={ mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon /> } 
+              onClick={()=> setMode(mode === "dark"? "light":"dark")} >
+                {mode === "dark"? "light":"dark"}mode
+              </Button>
             </Toolbar>
           </AppBar>
 
@@ -178,6 +188,8 @@ function App() {
 
               <Route path='/movies/add' element={<AddMovie  movieList={movieList} setMovieList={setMovieList} />} />
 
+              <Route path='/tic-tac-toe' element={<TicTacToe/>} />
+
               <Route path='/theme' element={<theme/>} />
 
             </Routes>
@@ -191,7 +203,6 @@ function App() {
 }
 
 export default App;
-
 
 
 
