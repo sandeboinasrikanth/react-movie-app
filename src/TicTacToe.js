@@ -1,5 +1,7 @@
 import { X } from "@mui/icons-material";
 import React, { useState } from "react";
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 export function TicTacToe() {
   return (
@@ -11,7 +13,7 @@ export function TicTacToe() {
 }
 
 function Board(){
-  const [board, setBoard] = useState([
+  const INITIAL_BOARD = [
     null,
     null,
     null,
@@ -21,10 +23,10 @@ function Board(){
     null,
     null,
     null,
-  ])
+  ]
+  const [board, setBoard] = useState(INITIAL_BOARD);
 
-  const [isXTurn, setXTurn] = useState(true);
-
+  
   const decideWinner = (board) =>{
     const lines = [
       [0,1,2],
@@ -36,10 +38,10 @@ function Board(){
       [0,4,8],
       [2,4,6],
     ];
-
+    
     for(let i=0; i<lines.length; i++){
       const [a, b, c] = lines[i];
-
+      
       if(board[a] !== null &&  board[a]=== board[b] && board[b] === board[c]){
         console.log(lines[i], a, b, c);
         console.log("Winner", board[a]);
@@ -48,8 +50,10 @@ function Board(){
     }
     return null;
   }
-
+  
   const winner = decideWinner(board);
+  
+  const [isXTurn, setXTurn] = useState(true);
 
   const handleClick=(index)=>{
     console.log(index)
@@ -65,15 +69,23 @@ function Board(){
 
   }
 
+  const restart = ()=>{
+    setBoard(INITIAL_BOARD);
+    setXTurn(true)
+  }
+
+  const { width, height } = useWindowSize();
+
   return( 
     <div>
+      {winner ? <Confetti width={width} height={height} gravity={0.02} /> : null }
       <div className="board">
         {board.map((val, index)=>(
           <GameBox key={index} val={val} onPlayerClick={()=>handleClick(index)} />
         ))}
-        <h2>Winner is: {winner} </h2>
       </div>
-      <button onClick={()=>}>Restart</button>
+        {winner ? <h2>Winner is: {winner} </h2>:null}
+        <button onClick={restart}>Restart</button>
     </div>
 )}
 
